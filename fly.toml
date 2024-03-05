@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for lambda-virus-scanner on 2024-03-05T15:58:21+08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'lambda-virus-scanner'
+primary_region = 'sin'
+swap_size_mb = 1536
+
+[env]
+  NODE_ENV = 'production'
+
+  # S3 Bucket config
+  # We use Cloudflare R2, so set region to us-east-1
+  # See https://developers.cloudflare.com/r2/api/s3/api/#bucket-region
+  AWS_REGION = 'us-east-1'
+  VIRUS_SCANNER_CLEAN_S3_BUCKET = 'form-virus-scanner-clean-bucket'
+  VIRUS_SCANNER_QUARANTINE_S3_BUCKET = 'form-virus-scanner-quarantine-bucket'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
